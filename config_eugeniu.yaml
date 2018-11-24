@@ -1,0 +1,10 @@
+IBM_TONE_ANALYZER:
+  version: 2018-11-24
+  url: https://gateway-fra.watsonplatform.net/tone-analyzer/api
+  username: 3a3be91e-24ad-46b8-b241-fa2b455be16b
+  password: BceuZNrIjMHz
+
+IBM_NLU:
+  version: 2018-11-24
+  apikey: m4sC_eclxR9fJav9UkopifqmpV4ILwraMfJDp7IZP5Xw
+  url: https://gateway-fra.watsonplatform.net/natural-language-understanding/api

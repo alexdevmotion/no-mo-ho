@@ -33,8 +33,8 @@ def get_synonyms_antonyms(word):
     return set(synonyms), set(antonyms)
 
 
-def filter_tokens_by_pos(tokens, pos):
-    return [token for token in tokens if token.pos_ == pos]
+def filter_tokens_by_pos(tokens, pos_arr):
+    return [token for token in tokens if token.pos_ in pos_arr]
 
 
 def deoffensate_word_antonym_approach(token, nlp):
@@ -42,4 +42,4 @@ def deoffensate_word_antonym_approach(token, nlp):
     if antonyms is None or len(antonyms) == 0:
         return None
 
-    return filter_tokens_by_pos([doc[0] for doc in antonyms if doc is not None and len(doc) > 0])
+    return filter_tokens_by_pos([doc[0] for doc in antonyms if doc is not None and len(doc) > 0], [token.pos_])

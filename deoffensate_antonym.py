@@ -14,6 +14,8 @@ def get_synonyms_anytonyms_based_on_similarity(word, nlp):
 
 def most_similar_spacy(word, nlp, num_items=10):
     word = nlp.vocab[word]
+    if not word:
+        return []
     queries = [w for w in word.vocab if w.is_lower == word.is_lower and w.prob >= -15]
     by_similarity = sorted(queries, key=lambda w: word.similarity(w), reverse=True)
     return [w.lower_ for w in by_similarity[:num_items]]
@@ -31,16 +33,13 @@ def get_synonyms_antonyms(word):
     return set(synonyms), set(antonyms)
 
 
+def filter_tokens_by_pos(tokens, pos):
+    return [token for token in tokens if token.pos_ == pos]
+
+
 def deoffensate_word_antonym_approach(token, nlp):
     synonyms, antonyms = get_synonyms_anytonyms_based_on_similarity(token.text, nlp)
     if antonyms is None or len(antonyms) == 0:
         return None
 
-    deoffensated_words = []
-    for antonym in antonyms:
-        antonym_token = nlp(antonym)
-        if not antonym_token or len(antonym_token) < 0:
-            continue
-        if token.pos_ == antonym_token[0].pos_:
-            deoffensated_words.append(antonym)
-    return deoffensated_words
+    return filter_tokens_by_pos([doc[0] for doc in antonyms if doc is not None and len(doc) > 0])

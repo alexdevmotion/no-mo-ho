@@ -58,9 +58,10 @@ class ToneAnalyzer:
         for token in emotions:
             token["emotion"] = sorted(token["emotion"].items(), key=lambda x: x[1], reverse=True)[0]
         
-        return [w for w in emotions
-            if w["emotion"][0] in ["disgust", "anger"]
-                and w["emotion"][1] > 0.5]
+        return [(w["text"], w["emotion"][0], w["emotion"][1])
+            for w in emotions
+                if w["emotion"][0] in ["disgust", "anger"]
+                    and w["emotion"][1] > 0.5]
 
 
 if __name__ == "__main__":

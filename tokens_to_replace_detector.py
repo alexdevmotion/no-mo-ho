@@ -1,10 +1,11 @@
 import spacy
+from tone_analyzer import ToneAnalyzer
 
 class TokenParser:
 
     def __init__(self):
-        # nlp = spacy.load('en_core_web_lg')
-        self.nlp = spacy.load('en')
+        nlp = spacy.load('en_core_web_lg')
+        # self.nlp = spacy.load('en')
 
     def get_tokens(self, str):
         doc = self.nlp(blob)
@@ -14,6 +15,6 @@ class TokenParser:
 
 
 if __name__ == "__main__":
-    blob = 'Ariana is a stupid bitch'
+    blob = "Ariana is a stupid bitch"
     parser = TokenParser()    
     parser.get_tokens(blob)

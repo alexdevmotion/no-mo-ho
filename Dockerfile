@@ -1,5 +1,10 @@
 FROM python:3-slim
 
+RUN apt-get update && apt-get install -y \
+    python-numpy \
+    libicu-dev \
+    python3-icu
+
 # Create app directory
 WORKDIR /usr/src/app
 
@@ -17,4 +22,4 @@ EXPOSE 5000
 
 ENV FLASK_APP server.py
 
-CMD ["flask", "run"]
+CMD ["flask", "run", "--host=0.0.0.0"]

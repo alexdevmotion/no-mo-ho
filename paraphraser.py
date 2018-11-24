@@ -40,11 +40,14 @@ def noho_resolve(text, offensive_tokens, graph_storage, token_parser, num_option
 
 
 def noho_train(text, offensive_tokens, token_parser, graph_storage):
+    found_something = False
     for offensive_token in offensive_tokens:
         deoffensated_words_in_graph = graph_storage.get_non_offensive_alternatives(offensive_token.text)
         if deoffensated_words_in_graph is None:
+            found_something = True
             deoffensated_words = deoffensate_word_similarity_approach(text, offensive_token, nlp, token_parser)
             graph_storage.add_non_offensive_mapping(offensive_token.text, deoffensated_words)
+    return found_something
 
 
 def load():
@@ -77,7 +80,6 @@ def train_praphraser(texts):
     for text in texts:
         print('Processing:', text)
         offensive_tokens = parser.get_offensive_tokens(text)
-        noho_train(text, offensive_tokens, parser, graph_storage)
-
-        print('Persisting...')
-        persist(graph_storage)
+        if noho_train(text, offensive_tokens, parser, graph_storage):
+            print('Persisting...')
+            persist(graph_storage)

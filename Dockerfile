@@ -9,7 +9,10 @@ COPY requirements.txt ./
 # RUN pip install
 RUN pip3 install -r requirements.txt
 
+# Expose port for outsite connection
+EXPOSE 5000
+
 # Bundle app source
 COPY . .
 
-CMD ["python3", "server.py"]
+ENTRYPOINT ["python3", "server.py"]

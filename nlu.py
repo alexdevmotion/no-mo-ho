@@ -7,7 +7,7 @@ config = yaml.load(open('config.yaml', 'r'))
 nlu_config = config['IBM_NLU']
 
 natural_language_understanding = NaturalLanguageUnderstandingV1(
-    version='2018-11-24',
+    version=nlu_config['version'],
     iam_apikey=nlu_config['apikey'],
     url=nlu_config['url']
 )

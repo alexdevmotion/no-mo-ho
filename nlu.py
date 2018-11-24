@@ -29,5 +29,5 @@ def do_nlu(text):
 
 
 if __name__ == "__main__":
-    text = "Yo nigga, what's up, get your nigga together, you whiny bitch."
+    text = "Yo naw, what's up, get your nothing together, you retarded thug."
     print(do_nlu(text))

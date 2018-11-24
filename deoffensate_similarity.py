@@ -11,8 +11,8 @@ def deoffensate_word_similarity_approach(text, token, nlp, token_parser):
         if not is_still_offensive(text, token.text, replacement_token.text, token_parser):
             deoffensated_tokens.append(replacement_token)
             print(replacement_token.text, 'REPLACES', token.text)
-    # TODO remove by lemmatization
-    return [token.text for token in deoffensated_tokens]
+    eliminated_lemma_clones = eliminate_lemma_clones(deoffensated_tokens)
+    return [token.text for token in eliminated_lemma_clones]
 
 
 def is_still_offensive(original_text, token_text, replacement_text, token_parser):
@@ -20,6 +20,7 @@ def is_still_offensive(original_text, token_text, replacement_text, token_parser
     new_offensive_tokens = token_parser.get_offensive_tokens(new_text)
     new_offesive_token_texts = [token.text for token in new_offensive_tokens]
     return replacement_text in new_offesive_token_texts
+
 
 def eliminate_lemma_clones(token_list):
     unique_tokens = []

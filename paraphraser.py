@@ -19,16 +19,22 @@ def pad_deoffensated(deoffensated_words, num_options):
     return deoffensated_words + ((num_options - len(deoffensated_words)) * [''])
 
 
-def noho_resolve(text, offensive_tokens, graph_storage, token_parser, num_options=5):
+def noho_resolve(text, offensive_tokens, graph_storage, token_parser, num_options):
     result = [text] * num_options
     for offensive_token in offensive_tokens:
         deoffensated_words = graph_storage.get_non_offensive_alternatives(offensive_token.text)
         padded_deoffensated = pad_deoffensated(deoffensated_words, num_options)
 
         for i in range(0, num_options):
-            for deoffensated_word in padded_deoffensated:
+            for j in range(0, len(padded_deoffensated)):
+                deoffensated_word = padded_deoffensated[j]
+                if len(deoffensated_word) == 0:
+                    result[i] = result[i].replace(offensive_token.text + ' ', '')
+                    result[i] = result[i].replace(' ' + offensive_token.text, '')
+                    break
                 if not is_still_offensive(result[i], offensive_token.text, deoffensated_word, token_parser):
                     result[i] = result[i].replace(offensive_token.text, deoffensated_word)
+                    padded_deoffensated.remove(deoffensated_word)
                     break
     return result
 
@@ -54,13 +60,13 @@ def persist(graph_storage):
     pickle.dump(graph_storage, out_file)
 
 
-def paraphrase(text):
+def paraphrase(text, num_options=4):
     graph_storage = load()
     tone_analyzer = ToneAnalyzer()
     parser = TokenParser(tone_analyzer)
     offensive_tokens = parser.get_offensive_tokens(text)
 
-    return noho_resolve(text, offensive_tokens, graph_storage, parser)
+    return noho_resolve(text, offensive_tokens, graph_storage, parser, num_options)
 
 
 def train_praphraser(texts):
@@ -75,10 +81,3 @@ def train_praphraser(texts):
 
         print('Persisting...')
         persist(graph_storage)
-
-
-if __name__ == '__main__':
-    text = "Yo nigga, what's up, get your shit together, you whiny bitch."
-    # print(paraphrase(text))
-
-    train_praphraser([text])

@@ -44,4 +44,4 @@ class GraphMappingStorage:
             neighbors_distance_two.extend(self.graph.get_neighbors(offensive_word_neighbor_vertex))
         all_neighbors = offensive_word_neighbors + neighbors_distance_two
         nonoffensive_vertices = [from_graph_vertex(vertex) for vertex in all_neighbors]
-        return set([v[0] for v in nonoffensive_vertices if v[1] is False])
+        return list(set([v[0] for v in nonoffensive_vertices if v[1] is False]))

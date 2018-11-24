@@ -1,12 +1,11 @@
 from selenium import webdriver
-from time import sleep
+
 
 class TweetGenerator:
     
     def __init__(self):
         self.default_search_terms = ["fuck+bitch", "shit+piece", "fag+stupid", "fuck+ass", "dick+head+face"]
         self.separator = "\n\n\n"
-
 
     def scrap_tweets(self, search_terms=None, file_name="tweets_v2.txt"):
         if search_terms is None:
@@ -29,8 +28,8 @@ class TweetGenerator:
         with open(file_name, "r") as f:
             all_tweets = f.read()
         all_tweets = all_tweets.split(self.separator)
-        tweets = [x for x in all_tweets if len(x.strip()) > 0]
-        return tweets
+        return [x for x in all_tweets if len(x.strip()) > 0]
+
 
 if __name__ == "__main__":
     generator = TweetGenerator()

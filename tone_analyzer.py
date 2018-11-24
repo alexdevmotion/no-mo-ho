@@ -6,6 +6,7 @@ from watson_developer_cloud.natural_language_understanding_v1 import Features, E
 
 CONFIG_PATH = 'config.yaml'
 
+
 class ToneAnalyzer:
     
     def __init__(self):
@@ -53,14 +54,16 @@ class ToneAnalyzer:
                     sentiment=True))).get_result()
         return nlu_analysis
 
-    def is_good_emotion(self, emotion):
-        emotion_type = emotion[0]
-        emotion_value = emotion[1]
-        if emotion_type == 'disgust' and emotion_value < .5:
+    def is_good_emotion(self, w):
+        emotion_type, emotion_value = w['emotion']
+        sentiment_score, sentiment_type = w['sentiment'].values()
+        if emotion_type == 'disgust' and emotion_value > .5:
             return False
-        if emotion_type == 'anger' and emotion_value < .4:
+        if emotion_type == 'anger' and emotion_value > .4:
             return False
-        if emotion_type == 'sadness' and emotion_value < .5:
+        if emotion_type == 'sadness' and emotion_value > .5:
+            return False
+        if sentiment_type == 'negative' and sentiment_score < -.6:
             return False
         return True
     
@@ -70,11 +73,11 @@ class ToneAnalyzer:
         for token in emotions:
             token["emotion"] = sorted(token["emotion"].items(), key=lambda x: x[1], reverse=True)[0]
         
-        return [(w["text"], w["emotion"][0], w["emotion"][1]) for w in emotions if self.is_good_emotion(w['emotion'])]
+        return [(w["text"], w["emotion"][0], w["emotion"][1]) for w in emotions if not self.is_good_emotion(w)]
 
 
 if __name__ == "__main__":
-    text = "Yo nigga, what's up, get your nigga together, you whiny bitch."
+    text = "Yo naw, what's up, get your nothing together, you retarded thug."
     analyzer = ToneAnalyzer()
     
     print(analyzer.get_bad_words(text))

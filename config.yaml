@@ -1,0 +1,5 @@
+IBM_TONE_ANALYZER:
+  version: 2018-11-24
+  url: https://gateway-fra.watsonplatform.net/tone-analyzer/api
+  username: 3b20ce40-a11c-4ba1-b193-87f5ba823612
+  password: tlr7gPBoPswb

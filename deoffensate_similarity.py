@@ -20,3 +20,13 @@ def is_still_offensive(original_text, token_text, replacement_text, token_parser
     new_offensive_tokens = token_parser.get_offensive_tokens(new_text)
     new_offesive_token_texts = [token.text for token in new_offensive_tokens]
     return replacement_text in new_offesive_token_texts
+
+def eliminate_lemma_clones(token_list):
+    unique_tokens = []
+    unique_lemmas = []
+    for token in token_list:
+        if token.lemma_ in unique_lemmas:
+            continue
+        unique_lemmas.append(token.lemma_)
+        unique_tokens.append(token)
+    return unique_tokens

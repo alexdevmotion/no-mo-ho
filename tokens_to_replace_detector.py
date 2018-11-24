@@ -1,5 +1,6 @@
 import spacy
 from tone_analyzer import ToneAnalyzer
+from deoffensate_similarity import eliminate_lemma_clones
 
 class TokenParser:
 
@@ -18,11 +19,11 @@ class TokenParser:
         doc = self.nlp(text)
         return [token for token in doc if token.text in word_list]
 
-
 if __name__ == "__main__":
     
-    text = "Yo nigga, what's up, get your shit together, you whiny bitch."
-        
+    text = "Yo nigga, what's up, get your shit, shits together, you whiny bitch."
+
     parser = TokenParser()    
     tokens = parser.get_offensive_tokens(text)
     print(tokens)
+    print(eliminate_lemma_clones(tokens))

@@ -14,10 +14,6 @@ natural_language_understanding = NaturalLanguageUnderstandingV1(
 
 
 def do_nlu(text):
-    # nlu_analysis = natural_language_understanding.analyze(
-    #     text=text,
-    #     features=Features(entities=EntitiesOptions(sentiment=True, limit=1))).get_result()
-
     nlu_analysis = natural_language_understanding.analyze(
         text=text,
         features=Features(

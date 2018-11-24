@@ -61,12 +61,12 @@ def train_praphraser(texts):
     parser = TokenParser(tone_analyzer)
 
     for text in texts:
-        print('Processing', text)
+        print('Processing:', text)
         offensive_tokens = parser.get_offensive_tokens(text)
         noho_train(text, offensive_tokens, parser, graph_storage)
 
-    print('Persisting...')
-    persist(graph_storage)
+        print('Persisting...')
+        persist(graph_storage)
 
 
 if __name__ == '__main__':

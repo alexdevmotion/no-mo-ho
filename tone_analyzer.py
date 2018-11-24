@@ -28,7 +28,7 @@ class ToneAnalyzer:
         nlu_config = config['IBM_NLU']
 
         natural_language_understanding = NaturalLanguageUnderstandingV1(
-            version='2018-11-24',
+            version=nlu_config['version'],
             iam_apikey=nlu_config['apikey'],
             url=nlu_config['url']
         )
@@ -51,6 +51,17 @@ class ToneAnalyzer:
                     emotion=True,
                     sentiment=True))).get_result()
         return nlu_analysis
+
+    def is_good_emotion(self, emotion):
+        emotion_type = emotion[0]
+        emotion_value = emotion[1]
+        if emotion_type == 'disgust' and emotion_value < .3:
+            return False
+        if emotion_type == 'anger' and emotion_value < .25:
+            return False
+        if emotion_type == 'sadness' and emotion_value < .5:
+            return False
+        return True
     
     def get_bad_words(self, text):
         emotions = self.get_emotions(text)
@@ -58,14 +69,11 @@ class ToneAnalyzer:
         for token in emotions:
             token["emotion"] = sorted(token["emotion"].items(), key=lambda x: x[1], reverse=True)[0]
         
-        return [(w["text"], w["emotion"][0], w["emotion"][1])
-            for w in emotions
-                if w["emotion"][0] in ["disgust", "anger"]
-                    and w["emotion"][1] > .15]
+        return [(w["text"], w["emotion"][0], w["emotion"][1]) for w in emotions if self.is_good_emotion(w['emotion'])]
 
 
 if __name__ == "__main__":
-    text = "Yo nigga, what's up, get your shit together, you whiny bitch."
+    text = "Yo nigga, what's up, get your nigga together, you whiny bitch."
     analyzer = ToneAnalyzer()
     
     print(analyzer.get_bad_words(text))

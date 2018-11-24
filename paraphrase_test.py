@@ -1,4 +1,4 @@
 from paraphraser import paraphrase
 
-text = "Yo nigga, what's up, get your shit together, you whiny bitch."
+text = "Codette is the worst organization the Earth has seen!"
 print(paraphrase(text))

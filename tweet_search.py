@@ -25,7 +25,7 @@ class TweetGenerator:
         driver.close()
 
     def load_file(self, file_name="tweets_v2.txt"):
-        with open(file_name, "r") as f:
+        with open(file_name, 'r', encoding='utf-8') as f:
             all_tweets = f.read()
         all_tweets = all_tweets.split(self.separator)
         return [x for x in all_tweets if len(x.strip()) > 0]

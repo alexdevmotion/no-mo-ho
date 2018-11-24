@@ -18,6 +18,8 @@ class Graph(object):
         return self.__generate_edges()
 
     def get_neighbors(self, vertex):
+        if not self.__graph_dict[vertex]:
+            return []
         return self.__graph_dict[vertex]
 
     def add_vertex(self, vertex):

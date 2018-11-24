@@ -61,7 +61,7 @@ class ToneAnalyzer:
         return [(w["text"], w["emotion"][0], w["emotion"][1])
             for w in emotions
                 if w["emotion"][0] in ["disgust", "anger"]
-                    and w["emotion"][1] > 0.5]
+                    and w["emotion"][1] > .3]
 
 
 if __name__ == "__main__":

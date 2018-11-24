@@ -33,21 +33,44 @@ def noho_train(text, offensive_tokens, token_parser, graph_storage):
             graph_storage.add_non_offensive_mapping(offensive_token.text, deoffensated_words)
 
 
-if __name__ == '__main__':
+def load():
     try:
         storage_file = open(STORAGE_PATH, 'rb')
-        graph_storage = pickle.load(storage_file)
+        return pickle.load(storage_file)
     except:
-        graph_storage = GraphMappingStorage()
+        return GraphMappingStorage()
 
-    text = "Yo nigga, what's up, get your shit together, you whiny bitch."
 
+def persist(graph_storage):
+    out_file = open(STORAGE_PATH, 'wb')
+    pickle.dump(graph_storage, out_file)
+
+
+def paraphrase(text):
+    graph_storage = load()
     tone_analyzer = ToneAnalyzer()
     parser = TokenParser(tone_analyzer)
     offensive_tokens = parser.get_offensive_tokens(text)
-    # noho_train(text, offensive_tokens, parser, graph_storage)
-    #
-    # out_file = open(STORAGE_PATH, 'wb')
-    # pickle.dump(graph_storage, out_file)
 
-    print(noho_resolve(text, offensive_tokens, graph_storage))
+    return noho_resolve(text, offensive_tokens, graph_storage)
+
+
+def train_praphraser(texts):
+    graph_storage = load()
+    tone_analyzer = ToneAnalyzer()
+    parser = TokenParser(tone_analyzer)
+
+    for text in texts:
+        print('Processing', text)
+        offensive_tokens = parser.get_offensive_tokens(text)
+        noho_train(text, offensive_tokens, parser, graph_storage)
+
+    print('Persisting...')
+    persist(graph_storage)
+
+
+if __name__ == '__main__':
+    text = "Yo nigga, what's up, get your shit together, you whiny bitch."
+    # paraphrase(text)
+
+    train_praphraser([text])

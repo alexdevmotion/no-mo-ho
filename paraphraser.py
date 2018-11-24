@@ -53,8 +53,12 @@ def noho_train(text, offensive_tokens, token_parser, graph_storage):
         deoffensated_words_in_graph = graph_storage.get_non_offensive_alternatives(offensive_token.text)
         if deoffensated_words_in_graph is None:
             found_something = True
-            deoffensated_words, offensive_tokens = deoffensate_word_similarity_approach(text, offensive_token, nlp, token_parser)
+            deoffensated_words, new_offensive_tokens = deoffensate_word_similarity_approach(text, offensive_token, nlp, token_parser)
             graph_storage.add_non_offensive_mapping(offensive_token.text, deoffensated_words)
+            if new_offensive_tokens is None:
+                offensive_tokens.remove(offensive_token)
+            else:
+                offensive_tokens = new_offensive_tokens
         else:
             break
     return found_something

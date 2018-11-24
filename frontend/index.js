@@ -1,7 +1,7 @@
-import { createOption, createParaphraser } from './paraphraser';
-import { magic } from './helper';
-import { getReplaceText } from './service';
-import { applyGlobalCSS, removeGlobalCSS } from './global-style';
+import { createOption, createParaphraser } from './src/paraphraser';
+import { magic } from './src/helper';
+import { getReplaceText } from './src/service';
+import { applyGlobalCSS, removeGlobalCSS } from './src/global-style';
 
 let finalText;
 
@@ -45,7 +45,7 @@ class Paraphraser {
   }
 
   _onContinue () {
-    finalText = this.targetArea.innerHTML;
+    finalText = this.targetArea.innerText;
     this.postBtn.click();
     this.remove();
   }

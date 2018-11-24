@@ -1,7 +1,6 @@
 # This file is used by pip to install required python packages
 # Usage: pip install -r requirements.txt
 
-Flask==0.12
-
+Flask
 pyyaml
 watson-developer-cloud>=2.4.1

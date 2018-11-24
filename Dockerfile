@@ -9,10 +9,12 @@ COPY requirements.txt ./
 # RUN pip install
 RUN pip3 install -r requirements.txt
 
-# Expose port for outsite connection
-EXPOSE 5000
-
 # Bundle app source
 COPY . .
 
-ENTRYPOINT ["python3", "server.py"]
+# Expose port for outsite connection
+EXPOSE 5000
+
+ENV FLASK_APP server.py
+
+CMD ["flask", "run"]

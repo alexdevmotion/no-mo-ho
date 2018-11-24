@@ -4,3 +4,4 @@
 Flask
 pyyaml
 watson-developer-cloud>=2.4.1
+spacy

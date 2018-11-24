@@ -4,17 +4,23 @@ from tone_analyzer import ToneAnalyzer
 class TokenParser:
 
     def __init__(self):
-        nlp = spacy.load('en_core_web_lg')
+        self.nlp = spacy.load('en_core_web_lg')
         # self.nlp = spacy.load('en')
 
-    def get_tokens(self, str):
-        doc = self.nlp(blob)
-        for token in doc:
-            print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_,
-                token.shape_, token.is_alpha, token.is_stop)
-
+    def get_tokens(self, text, word_list):
+        doc = self.nlp(text)
+        return [token for token in doc if token.text in word_list]
 
 if __name__ == "__main__":
-    blob = "Ariana is a stupid bitch"
+    
+    text = "Yo nigga, what's up, get your shit together, you whiny bitch."
+    
+    analyzer = ToneAnalyzer()
+    bad_words = analyzer.get_bad_words(text)
+    split_words = []
+    for word in bad_words:
+        split_words += word[0].split(" ")
+
     parser = TokenParser()    
-    parser.get_tokens(blob)
+    tokens = parser.get_tokens(text, split_words)
+    print(tokens)

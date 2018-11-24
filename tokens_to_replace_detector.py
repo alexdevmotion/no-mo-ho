@@ -7,7 +7,7 @@ class TokenParser:
         self.nlp = spacy.load('en_core_web_lg')
         self.tone_analyzer = tone_analyzer
 
-    def get_tokens(self, text):
+    def get_offensive_tokens(self, text):
         bad_words = self.tone_analyzer.get_bad_words(text)
         split_words = []
         for word in bad_words:
@@ -18,10 +18,11 @@ class TokenParser:
         doc = self.nlp(text)
         return [token for token in doc if token.text in word_list]
 
+
 if __name__ == "__main__":
     
     text = "Yo nigga, what's up, get your shit together, you whiny bitch."
         
     parser = TokenParser()    
-    tokens = parser.get_tokens(text)
+    tokens = parser.get_offensive_tokens(text)
     print(tokens)

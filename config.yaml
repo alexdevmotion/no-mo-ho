@@ -3,3 +3,7 @@ IBM_TONE_ANALYZER:
   url: https://gateway-fra.watsonplatform.net/tone-analyzer/api
   username: 3b20ce40-a11c-4ba1-b193-87f5ba823612
   password: tlr7gPBoPswb
+
+IBM_NLU:
+  apikey: ESd3hYlpHotDM0IRlFLkEe5odCiXzEYss6OiN9DGsWZu
+  url: https://gateway-fra.watsonplatform.net/natural-language-understanding/api

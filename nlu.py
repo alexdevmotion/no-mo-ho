@@ -1,7 +1,7 @@
-import json
 import yaml
+
 from watson_developer_cloud import NaturalLanguageUnderstandingV1
-from watson_developer_cloud.natural_language_understanding_v1 import Features, CategoriesOptions, EntitiesOptions
+from watson_developer_cloud.natural_language_understanding_v1 import Features, EntitiesOptions
 
 config = yaml.load(open('config.yaml', 'r'))
 nlu_config = config['IBM_NLU']
@@ -12,8 +12,10 @@ natural_language_understanding = NaturalLanguageUnderstandingV1(
     url=nlu_config['url']
 )
 
-response = natural_language_understanding.analyze(
-    text='Drangea is a motherfucking corrupt motherfucker. Fuck him.',
-    features=Features(entities=EntitiesOptions(sentiment=True, limit=1))).get_result()
 
-print(json.dumps(response, indent=2))
+def do_nlu(text):
+    nlu_analysis = natural_language_understanding.analyze(
+        text=text,
+        features=Features(entities=EntitiesOptions(sentiment=True, limit=1))).get_result()
+
+    return nlu_analysis

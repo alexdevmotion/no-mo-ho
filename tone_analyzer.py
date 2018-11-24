@@ -60,12 +60,12 @@ class ToneAnalyzer:
         
         return [(w["text"], w["emotion"][0], w["emotion"][1])
             for w in emotions
-                if w["emotion"][0] in ["disgust", "anger"]
-                    and w["emotion"][1] > .15]
+                if w["emotion"][0] in ["disgust", "anger", "sadness"]
+                    and w["emotion"][1] > .4]
 
 
 if __name__ == "__main__":
-    text = "Yo nigga, what's up, get your shit together, you whiny bitch."
+    text = "Yo nigga, what's up, get your nigga together, you whiny bitch."
     analyzer = ToneAnalyzer()
     
     print(analyzer.get_bad_words(text))

@@ -28,4 +28,6 @@ def do_nlu(text):
     return nlu_analysis
 
 
-do_nlu('Ariana is a stupid bitch')
+if __name__ == "__main__":
+    text = "Yo nigga, what's up, get your nigga together, you whiny bitch."
+    print(do_nlu(text))

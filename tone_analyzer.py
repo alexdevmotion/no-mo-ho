@@ -4,6 +4,7 @@ from watson_developer_cloud import ToneAnalyzerV3
 from watson_developer_cloud import NaturalLanguageUnderstandingV1
 from watson_developer_cloud.natural_language_understanding_v1 import Features, EntitiesOptions, KeywordsOptions
 
+CONFIG_PATH = 'config.yaml'
 
 class ToneAnalyzer:
     
@@ -12,7 +13,7 @@ class ToneAnalyzer:
         self._setup_nlu()
 
     def _setup_tone_analyzer(self):
-        config = yaml.load(open('config.yaml', 'r'))
+        config = yaml.load(open(CONFIG_PATH, 'r'))
         tone_analyzer_config = config['IBM_TONE_ANALYZER']
 
         tone_analyzer = ToneAnalyzerV3(
@@ -24,7 +25,7 @@ class ToneAnalyzer:
         self.analyzer = tone_analyzer
 
     def _setup_nlu(self):
-        config = yaml.load(open('config.yaml', 'r'))
+        config = yaml.load(open(CONFIG_PATH, 'r'))
         nlu_config = config['IBM_NLU']
 
         natural_language_understanding = NaturalLanguageUnderstandingV1(
@@ -55,9 +56,9 @@ class ToneAnalyzer:
     def is_good_emotion(self, emotion):
         emotion_type = emotion[0]
         emotion_value = emotion[1]
-        if emotion_type == 'disgust' and emotion_value < .3:
+        if emotion_type == 'disgust' and emotion_value < .5:
             return False
-        if emotion_type == 'anger' and emotion_value < .25:
+        if emotion_type == 'anger' and emotion_value < .4:
             return False
         if emotion_type == 'sadness' and emotion_value < .5:
             return False

@@ -1,8 +1,7 @@
 import pickle
-import random
 import spacy
 
-from deoffensate_similarity import deoffensate_word_similarity_approach
+from deoffensate_similarity import deoffensate_word_similarity_approach, is_still_offensive
 from graph_mapping_storage import GraphMappingStorage
 from tokens_to_replace_detector import TokenParser
 from tone_analyzer import ToneAnalyzer
@@ -12,16 +11,25 @@ nlp = spacy.load('en_core_web_lg')
 STORAGE_PATH = 'storage/graph.pkl'
 
 
-def noho_resolve(text, offensive_tokens, graph_storage, num_options=5):
+def pad_deoffensated(deoffensated_words, num_options):
+    if deoffensated_words is None:
+        return [''] * num_options
+    if len(deoffensated_words) >= num_options:
+        return deoffensated_words + ['']
+    return deoffensated_words + ((num_options - len(deoffensated_words)) * [''])
+
+
+def noho_resolve(text, offensive_tokens, graph_storage, token_parser, num_options=5):
     result = [text] * num_options
     for offensive_token in offensive_tokens:
         deoffensated_words = graph_storage.get_non_offensive_alternatives(offensive_token.text)
-        if len(deoffensated_words) < num_options:
-            num_options = len(deoffensated_words)
-            result = result[:num_options]
-        ranomized_deoffensated = random.sample(deoffensated_words, num_options)
+        padded_deoffensated = pad_deoffensated(deoffensated_words, num_options)
+
         for i in range(0, num_options):
-            result[i] = result[i].replace(offensive_token.text, ranomized_deoffensated[i])
+            for deoffensated_word in padded_deoffensated:
+                if not is_still_offensive(result[i], offensive_token.text, deoffensated_word, token_parser):
+                    result[i] = result[i].replace(offensive_token.text, deoffensated_word)
+                    break
     return result
 
 
@@ -52,7 +60,7 @@ def paraphrase(text):
     parser = TokenParser(tone_analyzer)
     offensive_tokens = parser.get_offensive_tokens(text)
 
-    return noho_resolve(text, offensive_tokens, graph_storage)
+    return noho_resolve(text, offensive_tokens, graph_storage, parser)
 
 
 def train_praphraser(texts):
@@ -71,6 +79,6 @@ def train_praphraser(texts):
 
 if __name__ == '__main__':
     text = "Yo nigga, what's up, get your shit together, you whiny bitch."
-    # paraphrase(text)
+    # print(paraphrase(text))
 
     train_praphraser([text])

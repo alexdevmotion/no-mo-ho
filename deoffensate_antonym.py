@@ -42,4 +42,4 @@ def deoffensate_word_antonym_approach(token, nlp):
     if antonyms is None or len(antonyms) == 0:
         return None
 
-    return filter_tokens_by_pos([doc[0] for doc in antonyms if doc is not None and len(doc) > 0], [token.pos_])
+    return filter_tokens_by_pos([nlp(doc)[0] for doc in antonyms], [token.pos_])

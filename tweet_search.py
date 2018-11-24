@@ -3,9 +3,9 @@ from time import sleep
 
 driver = webdriver.Chrome("./chromedriver")
 
-search_terms = ["fuck", "shit", "bitch", "dick", "bitch"]
+search_terms = ["fuck+bitch", "shit+piece", "fag+stupid", "fuck+ass", "dick+head+face"]
 
-with open("tweets.txt", "w") as f:
+with open("tweets_v2.txt", "w") as f:
     for search_term in search_terms:
         
         url = "https://twitter.com/search?q={}".format(search_term)

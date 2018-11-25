@@ -8,6 +8,7 @@ export function getReplaceText (query) {
     };
 
     ws.onmessage = function (response) {
+      console.log('RESULT:', response);
       resolve(JSON.parse(response.data));
     };
 

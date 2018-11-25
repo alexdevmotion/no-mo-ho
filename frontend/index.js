@@ -28,6 +28,7 @@ class Paraphraser {
     this.isOpen = false;
     this.userAgreed = false;
     this.isApplied = false;
+    this.hasContinued = false;
   }
 
   _getDefaultParams () {
@@ -49,6 +50,7 @@ class Paraphraser {
   }
 
   _onContinue () {
+    this.hasContinued = true;
     finalText = this.targetArea.innerText;
     this.postBtn.click();
     this._onClose();
@@ -135,7 +137,7 @@ class Paraphraser {
   _applyPostBtnListener () {
     console.log('Applied post btn event');
     const l = this.postBtn.addEventListener('click', async ev => {
-      if (this.userAgreed) return;
+      if (this.userAgreed || this.hasContinued) return;
 
       ev.stopPropagation();
 
@@ -153,6 +155,12 @@ class Paraphraser {
       this._insetTextOptions(result);
     });
     this.listeners.push({ type: 'keydown', listener: l });
+  }
+
+  _removeListeners () {
+    this.listeners.forEach(l => {
+      document.removeEventListener(l.type, l.listener);
+    });
   }
 
   apply () {
@@ -175,9 +183,7 @@ class Paraphraser {
   remove () {
     console.group('Removing paraphraser');
     this.isApplied = false;
-    this.listeners.forEach(l => {
-      document.removeEventListener(l.type, l.listener);
-    });
+    this._removeListeners();
     removeGlobalCSS();
     this._init();
     console.groupEnd();

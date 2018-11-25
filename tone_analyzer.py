@@ -42,6 +42,19 @@ class ToneAnalyzer:
             'application/json', content_language="en"
         ).get_result()
 
+    def get_tone_score(self, text):
+        main_tone = self.get_tone(text)
+        if 'document_tone' not in main_tone:
+            return .2
+        document_tone = main_tone['document_tone']
+        score = 0
+        for tone in document_tone['tones']:
+            if tone['tone_id'] in ['joy']:
+                score += tone['score']
+            elif tone['tone_id'] in ['fear', 'anger', 'disgust']:
+                score += .1 * tone['score']
+        return score
+
     def get_emotions(self, text):
         nlu_analysis = self.understander.analyze(
             text=text,
@@ -76,8 +89,9 @@ class ToneAnalyzer:
 
 
 if __name__ == "__main__":
-    text = "great"
+    text = "idiotic"
     analyzer = ToneAnalyzer()
     
     # print(analyzer.get_bad_words(text))
     print(analyzer.get_tone(text))
+    print(analyzer.get_tone_score(text))

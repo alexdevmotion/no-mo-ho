@@ -7,6 +7,7 @@ def deoffensate_word_similarity_approach(text, token, nlp, token_parser):
     tokens_filtered_by_pos = filter_tokens_by_pos(tokens, [token.pos_])
 
     deoffensated_tokens = []
+    remaining_offensive_tokens = None
     for replacement_token in tokens_filtered_by_pos:
         is_still, _remaining_offensive_tokens = is_still_offensive(text, token.text, replacement_token.text, token_parser)
         if not is_still:

@@ -13,7 +13,7 @@ class TokenParser:
         tokens = []
         for word in bad_words:
             tokens += self.nlp(word[0])
-        return tokens
+        return [token for token in tokens if token.pos_ in ['VERB', 'ADJ', 'ADV', 'NOUN', 'INTJ']]
 
 
 if __name__ == "__main__":

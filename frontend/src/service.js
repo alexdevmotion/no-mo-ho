@@ -1,13 +1,18 @@
-export async function getReplaceText (query) {
+export function getReplaceText (query) {
   const q = `q=${encodeURIComponent(query)}`;
-  try {
-    const response = await fetch(`https://noho.facebook.com:443/noho?${q}`);
-    return response.data;
-  } catch (err) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(['Here is a sentence', 'here is another']);
-      }, 200);
-    });
-  }
+  return new Promise((resolve, reject) => {
+    const ws = new WebSocket('ws://localhost:4000');
+
+    ws.onopen = function () {
+      ws.send(q);
+    };
+
+    ws.onmessage = function (response) {
+      resolve(JSON.parse(response.data));
+    };
+
+    ws.onerror = function (err) {
+      reject(['Something unexpected happened']);
+    };
+  });
 }

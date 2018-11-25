@@ -9,7 +9,11 @@ class TokenParser:
         self.tone_analyzer = tone_analyzer
 
     def get_offensive_tokens(self, text):
-        bad_words = self.tone_analyzer.get_bad_words(text)
+        try:
+            bad_words = self.tone_analyzer.get_bad_words(text)
+        except:
+            print('Failed to make request for NLU')
+            return []
         tokens = []
         for word in bad_words:
             tokens += self.nlp(word[0])

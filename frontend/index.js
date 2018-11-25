@@ -91,10 +91,22 @@ class Paraphraser {
       container.appendChild(optionNode);
     });
 
-    const okWithIt = createOption('I don\'t care. Let me post.', () => {
+    const span1 = document.createElement('span');
+    span1.innerText = 'Don\'t care. ';
+
+    const span2 = document.createElement('span');
+    span2.setAttribute('class', 'bold-text');
+    span2.innerText = 'POST!';
+
+    const okWithIt = document.createElement('span');
+    okWithIt.setAttribute('class', 'ok-with-it');
+    okWithIt.addEventListener('click', () => {
       this.userAgreed = true;
       this._onContinue();
     });
+
+    okWithIt.appendChild(span1);
+    okWithIt.appendChild(span2);
 
     container.appendChild(okWithIt);
   }

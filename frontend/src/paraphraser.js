@@ -29,7 +29,7 @@ function createHeader (options) {
     padding: '10px',
     display: 'flex',
     'align-items': 'center',
-    'font-size': '1.5em',
+    'font-size': '1.6em',
     'border-bottom': '1px solid black',
   };
   Helper.applyStyleOnNode(header, headerStyles);
@@ -44,6 +44,10 @@ function createBody (options) {
 
   function createParagraph () {
     const span = document.createElement('span');
+    const spanStyles = {
+      color: 'gray',
+    };
+    Helper.applyStyleOnNode(span, spanStyles);
     span.innerText = 'You may end up being banned form the site. How about changing the text to one of the following:';
     return span;
   }
@@ -66,7 +70,7 @@ function createBody (options) {
   const bodyStyles = {
     background: 'white',
     padding: '10px',
-    'font-size': '1.1em',
+    'font-size': '1.2em',
   };
 
   Helper.applyStyleOnNode(body, bodyStyles);
@@ -79,7 +83,6 @@ function createBody (options) {
 function createMainContainer (options) {
   const container = document.createElement("div");
   const styles = {
-    background: 'white',
     overflow: 'hidden',
     border: '1px solid black',
     'border-radius': '3%',

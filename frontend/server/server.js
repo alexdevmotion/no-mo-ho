@@ -2,10 +2,13 @@ const express = require('express');
 const axios = require('axios');
 const fs = require('fs');
 const https = require('https');
+const cors = require('cors');
 const app = express();
 
-const PORT = 80;
+const PORT = 443;
 const HOSTNAME = '0.0.0.0';
+
+app.use(cors());
 
 app.get('/noho', async function (req, res) {
   console.log(req.query);

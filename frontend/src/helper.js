@@ -10,5 +10,5 @@ export class Helper {
 
 export const magic = {
   TOP_OFFSET: 10,
-  CONTAINER_WIDTH: 400,
+  CONTAINER_WIDTH: 600,
 };

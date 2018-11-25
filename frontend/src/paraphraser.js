@@ -1,9 +1,21 @@
 import { Helper, magic } from './helper';
 
 function createHeader (options) {
+  const span1 = document.createElement('span');
+  span1.innerText = 'It looks like this is ';
+
+  const span2 = document.createElement('span');
+  span2.setAttribute('class', 'bold-text');
+  span2.innerText = 'offensive';
+
+  const span3 = document.createElement('span');
+  span3.innerText = ' language';
+
   const span = document.createElement('span');
   span.style.flex = '1';
-  span.innerText = 'It looks like this is offensive language.';
+  span.appendChild(span1);
+  span.appendChild(span2);
+  span.appendChild(span3);
 
   const closeBtn = document.querySelector('div[aria-label="Dismiss"]').cloneNode(true);
   closeBtn.style.display = 'flex';
@@ -12,11 +24,12 @@ function createHeader (options) {
 
   const header = document.createElement('div');
   const headerStyles = {
-    background: '#f5f6f7',
+    background: '#4267b2',
+    color: 'white',
     padding: '10px',
     display: 'flex',
     'align-items': 'center',
-    'font-size': '1.5em',
+    'font-size': '1.6em',
     'border-bottom': '1px solid black',
   };
   Helper.applyStyleOnNode(header, headerStyles);
@@ -31,6 +44,10 @@ function createBody (options) {
 
   function createParagraph () {
     const span = document.createElement('span');
+    const spanStyles = {
+      color: 'gray',
+    };
+    Helper.applyStyleOnNode(span, spanStyles);
     span.innerText = 'You may end up being banned form the site. How about changing the text to one of the following:';
     return span;
   }
@@ -53,7 +70,7 @@ function createBody (options) {
   const bodyStyles = {
     background: 'white',
     padding: '10px',
-    'font-size': '1.1em',
+    'font-size': '1.2em',
   };
 
   Helper.applyStyleOnNode(body, bodyStyles);
@@ -66,7 +83,6 @@ function createBody (options) {
 function createMainContainer (options) {
   const container = document.createElement("div");
   const styles = {
-    background: 'white',
     overflow: 'hidden',
     border: '1px solid black',
     'border-radius': '3%',

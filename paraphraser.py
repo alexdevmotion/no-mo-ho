@@ -1,12 +1,7 @@
 import pickle
-import spacy
 
 from deoffensate_similarity import deoffensate_word_similarity_approach, is_still_offensive
-from graph_mapping_storage import GraphMappingStorage
-from tokens_to_replace_detector import TokenParser
-from tone_analyzer import ToneAnalyzer
 
-nlp = spacy.load('en_core_web_lg')
 
 STORAGE_PATH = 'storage/graph.pkl'
 
@@ -19,13 +14,27 @@ def pad_deoffensated(deoffensated_words, num_options):
     return deoffensated_words + ((num_options - len(deoffensated_words)) * [''])
 
 
-def noho_resolve(text, offensive_tokens, graph_storage, token_parser, num_options):
+def sort_deoffensated(deoffensated_words, tone_analyzer):
+    if len(deoffensated_words) == 0 or deoffensated_words == ['']:
+        return deoffensated_words
+    deoffensated_word_tones = [(word, tone_analyzer.get_tone_score(word)) for word in deoffensated_words]
+    sorted_deoffensated_word_tones = sorted(deoffensated_word_tones, key=lambda tup: tup[1], reverse=True)
+    return [tup[0] for tup in sorted_deoffensated_word_tones]
+
+
+def noho_resolve(text, offensive_tokens, graph_storage, token_parser, nlp, num_options):
     result = [text] * num_options
     while len(offensive_tokens) > 0:
         offensive_token = offensive_tokens[0]
-        # TODO implement ad hoc train if you don't find alternatives for the token
         deoffensated_words = graph_storage.get_non_offensive_alternatives(offensive_token.text)
-        padded_deoffensated = pad_deoffensated(deoffensated_words, num_options)
+        if deoffensated_words is None:
+            print('Offensive token', offensive_token.text, 'not found, training ad hoc..')
+            noho_train(text, offensive_tokens, token_parser, graph_storage, nlp)
+            print('Persisting...')
+            persist(graph_storage)
+            deoffensated_words = graph_storage.get_non_offensive_alternatives(offensive_token.text)
+        sorted_deoffensated = sort_deoffensated(deoffensated_words, token_parser.tone_analyzer)
+        padded_deoffensated = pad_deoffensated(sorted_deoffensated, num_options)
 
         for i in range(0, num_options):
             for j in range(0, len(padded_deoffensated)):
@@ -33,10 +42,9 @@ def noho_resolve(text, offensive_tokens, graph_storage, token_parser, num_option
                 if len(deoffensated_word) == 0:
                     result[i] = result[i].replace(offensive_token.text + ' ', '')
                     result[i] = result[i].replace(' ' + offensive_token.text, '')
+                    if offensive_token in offensive_tokens:
+                        offensive_tokens.remove(offensive_token)
                     break
-                # TODO instead of settling with the first acceptable variant, rank them all after how positive they are
-                # call get_tone on each token and rank them by how positive they are, then take them in that order
-                # order_deoffensated_by_positiveness(deoffensated_words)
                 is_still, _remaining_offensive_tokens = is_still_offensive(result[i], offensive_token.text, deoffensated_word, token_parser)
                 if not is_still:
                     offensive_tokens = _remaining_offensive_tokens
@@ -46,7 +54,7 @@ def noho_resolve(text, offensive_tokens, graph_storage, token_parser, num_option
     return result
 
 
-def noho_train(text, offensive_tokens, token_parser, graph_storage):
+def noho_train(text, offensive_tokens, token_parser, graph_storage, nlp):
     found_something = False
     while len(offensive_tokens) > 0:
         offensive_token = offensive_tokens[0]
@@ -64,37 +72,21 @@ def noho_train(text, offensive_tokens, token_parser, graph_storage):
     return found_something
 
 
-def load():
-    try:
-        storage_file = open(STORAGE_PATH, 'rb')
-        return pickle.load(storage_file)
-    except:
-        return GraphMappingStorage()
-
-
 def persist(graph_storage):
     out_file = open(STORAGE_PATH, 'wb')
     pickle.dump(graph_storage, out_file)
 
 
-def paraphrase(text, num_options=4):
-    graph_storage = load()
-    tone_analyzer = ToneAnalyzer()
-    parser = TokenParser(tone_analyzer, nlp)
-    offensive_tokens = parser.get_offensive_tokens(text)
-
-    return noho_resolve(text, offensive_tokens, graph_storage, parser, num_options)
+def paraphrase(text, graph_storage, token_parser, nlp, num_options=4):
+    offensive_tokens = token_parser.get_offensive_tokens(text)
+    return noho_resolve(text, offensive_tokens, graph_storage, token_parser, nlp, num_options)
 
 
-def train_praphraser(texts):
-    graph_storage = load()
-    tone_analyzer = ToneAnalyzer()
-    parser = TokenParser(tone_analyzer, nlp)
-
+def train_praphraser(texts, token_parser, graph_storage, nlp):
     for text in texts:
         print('Processing:', text)
-        offensive_tokens = parser.get_offensive_tokens(text)
-        if noho_train(text, offensive_tokens, parser, graph_storage):
+        offensive_tokens = token_parser.get_offensive_tokens(text)
+        if noho_train(text, offensive_tokens, token_parser, graph_storage, nlp):
             print('Persisting...')
             persist(graph_storage)
         else:

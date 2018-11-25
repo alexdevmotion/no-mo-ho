@@ -8,6 +8,7 @@ from paraphraser import paraphrase
 from tokens_to_replace_detector import TokenParser
 from tone_analyzer import ToneAnalyzer
 
+
 app = Flask(__name__)
 STORAGE_PATH = 'storage/graph.pkl'
 
@@ -31,3 +32,7 @@ def noho():
     text = request.args.get('q')
     paraphrases = paraphrase(text, graph_storage, token_parser, nlp)
     return json.dumps(paraphrases)
+
+
+if __name__ == "__main__":
+    app.run(port='5000', host='0.0.0.0')

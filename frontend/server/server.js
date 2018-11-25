@@ -6,14 +6,15 @@ const app = express();
 
 app.get('/noho', async function (req, res) {
   console.log(req.query);
-  const result = await axios.get('http://localhost/noho');
+  const result = await axios.get(`http://localhost:5000/noho?q=${req.query.q}`);
   console.log(result);
+  res.send(result.data);
 });
 
 https.createServer({
   key: fs.readFileSync('server.key'),
   cert: fs.readFileSync('server.cert')
 }, app)
-  .listen(3000, function () {
-    console.log('Example app listening on port 3000! Go to https://localhost:3000/')
+  .listen(80, function () {
+    console.log('Node dispatcher listening on port 80! Go to https://localhost:80/')
   });

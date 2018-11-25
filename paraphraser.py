@@ -79,7 +79,8 @@ def persist(graph_storage):
 
 def paraphrase(text, graph_storage, token_parser, nlp, num_options=4):
     offensive_tokens = token_parser.get_offensive_tokens(text)
-    return noho_resolve(text, offensive_tokens, graph_storage, token_parser, nlp, num_options)
+    result = noho_resolve(text, offensive_tokens, graph_storage, token_parser, nlp, num_options)
+    return list(set(result))
 
 
 def train_praphraser(texts, token_parser, graph_storage, nlp):

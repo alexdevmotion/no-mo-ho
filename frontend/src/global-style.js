@@ -33,7 +33,6 @@ background-color: #365899;
 
 #noho-paraphraser .bold-text {
   font-weight: bold;
-  color: #e96a6a;
 }
 `;
 const head = document.getElementsByTagName('head')[0];

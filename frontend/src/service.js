@@ -1,9 +1,12 @@
 export async function getReplaceText (query) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(['Here is a sentence', 'here is another']);
-    }, 200);
-  });
-  // const q = `q=${encodeURIComponent(query)}`;
-  // return await fetch(`http://172.25.0.2:5000/noho?${q}`)
+  const q = `q=${encodeURIComponent(query)}`;
+  try {
+    return await fetch(`https://noho.facebook.com/noho?${q}`);
+  } catch (err) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(['Here is a sentence', 'here is another']);
+      }, 200);
+    });
+  }
 }

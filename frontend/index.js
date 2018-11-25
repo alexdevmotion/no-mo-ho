@@ -38,6 +38,7 @@ class Paraphraser {
   }
 
   _onClose (ev) {
+    if (!this.isOpen) return;
     this._removeHighlightOffensiveArea();
     const body = document.getElementsByTagName('body')[0];
     this.isOpen = false;

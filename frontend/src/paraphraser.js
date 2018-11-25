@@ -1,9 +1,21 @@
 import { Helper, magic } from './helper';
 
 function createHeader (options) {
+  const span1 = document.createElement('span');
+  span1.innerText = 'It looks like this is ';
+
+  const span2 = document.createElement('span');
+  span2.setAttribute('class', 'bold-text');
+  span2.innerText = 'offensive';
+
+  const span3 = document.createElement('span');
+  span3.innerText = ' language';
+
   const span = document.createElement('span');
   span.style.flex = '1';
-  span.innerText = 'It looks like this is offensive language.';
+  span.appendChild(span1);
+  span.appendChild(span2);
+  span.appendChild(span3);
 
   const closeBtn = document.querySelector('div[aria-label="Dismiss"]').cloneNode(true);
   closeBtn.style.display = 'flex';
@@ -12,7 +24,8 @@ function createHeader (options) {
 
   const header = document.createElement('div');
   const headerStyles = {
-    background: '#f5f6f7',
+    background: '#4267b2',
+    color: 'white',
     padding: '10px',
     display: 'flex',
     'align-items': 'center',

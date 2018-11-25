@@ -3,6 +3,10 @@ const css = `
   color: #4267b2;
   cursor: pointer;
 }
+
+#noho-paraphraser .bold-text {
+  font-weight: bold;
+}
 `;
 const head = document.getElementsByTagName('head')[0];
 
